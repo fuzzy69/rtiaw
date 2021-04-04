@@ -1,0 +1,19 @@
+{
+	"authors": [
+		"fuzzy69"
+	],
+	"description": "Ray tracing in a weekend implemented in D language.",
+	"name": "rtiaw",
+	"dependencies": {
+		"bindbc-sdl": "~>0.16.0",
+		"bindbc-opengl": "~>0.12.0"
+	},
+	"versions" : [
+		"BindSDL_Image",
+		"BindSDL_Timer",
+		"SDL_205",
+		"SDLImage205",
+		"GL_30",
+		"GL_AllowDeprecated"
+	]
+}
