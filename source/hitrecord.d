@@ -1,5 +1,6 @@
 module hitrecord;
 
+import material : Material;
 import ray : Ray;
 import vector3 : Vector3;
 
@@ -9,6 +10,7 @@ struct HitRecord
     float t;
     Vector3 p;
     Vector3 normal;
+    Material material;
 }
 
 abstract class Hitable

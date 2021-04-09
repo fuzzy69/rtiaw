@@ -14,10 +14,13 @@ import bindbc.sdl;
 import camera : Camera;
 import color : Color, getColor;
 import hitrecord : Hitable, HitableList;
+import lambertian : Lambertian;
+import metal : Metal;
 import rand : getRandomBetween0and1;
 import ray : Ray;
 import sphere : hitSphere, Sphere;
 import vector3 : Vector3, unitVector, dot;
+// import material : Material;
 
 
 void main()
@@ -62,8 +65,10 @@ void main()
     Vector3 origin = Vector3(0.0, 0.0, 0.0);
     
     Hitable[] hitableList;
-    hitableList ~= new Sphere(Vector3(0, 0, -1), 0.5);
-    hitableList ~= new Sphere(Vector3(0, -100.5, -1), 100);
+    hitableList ~= new Sphere(Vector3(0, 0, -1), 0.5, new Lambertian(Vector3(0.8, 0.3, 0.3)));
+    hitableList ~= new Sphere(Vector3(0, -100.5, -1), 100, new Lambertian(Vector3(0.8, 0.8, 0.0)));
+    hitableList ~= new Sphere(Vector3(1, 0, -1), 0.5, new Metal(Vector3(0.8, 0.6, 0.2)));
+    hitableList ~= new Sphere(Vector3(-1, 0, -1), 0.5, new Metal(Vector3(0.8, 0.8, 0.8)));
     HitableList world = new HitableList(hitableList);
 
     immutable(int) ns = 10;
@@ -80,7 +85,7 @@ void main()
                 float v = cast(float)(y + getRandomBetween0and1) / windowHeight;
                 Ray ray = camera.getRay(u, v);
                 Vector3 p = ray.pointAtParameter(2.0);
-                color += getColor(ray, world);
+                color += getColor(ray, world, 0);
             }
             color /= cast(float)(ns);
             color = Vector3(sqrt(color.r), sqrt(color.g), sqrt(color.b));

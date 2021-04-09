@@ -36,18 +36,27 @@ Vector3 randomInUnitSphere()
     return p;
 }
 
-Vector3 getColor(Ray ray, HitableList world)
+Vector3 getColor(Ray ray, HitableList world, int depth)
 {
     HitRecord hitRecord;
     if (world.hit(ray, 0.0, float.max, hitRecord))
     {
-        Vector3 target = hitRecord.p + hitRecord.normal + randomInUnitSphere;
-        return getColor(new Ray(hitRecord.p, target - hitRecord.p), world) * 0.5;
+        Ray scattered;
+        Vector3 attenuation;
+        if (depth < 50  && hitRecord.material.scatter(ray, hitRecord, attenuation, scattered))
+        {
+            return getColor(scattered, world, depth) * attenuation;
+        }
+        else
+        {
+            return Vector3(0, 0, 0);
+        }
     }
     else
     {
         Vector3 unitDirection = unitVector(ray.direction);
         immutable(float) t = 0.5 * (unitDirection.y + 1.0);
         return Vector3(1.0, 1.0, 1.0) * (1.0f - t) + Vector3(0.5, 0.7, 1.0) * t;
+
     }
 }

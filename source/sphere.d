@@ -3,6 +3,7 @@ module sphere;
 import std.math : sqrt;
 
 import hitrecord : HitRecord, Hitable;
+import material : Material;
 import ray : Ray;
 import vector3 : Vector3, dot;
 
@@ -10,10 +11,11 @@ import vector3 : Vector3, dot;
 class Sphere : Hitable
 {
     this() {}
-    this(Vector3 center, float radius)
+    this(Vector3 center, float radius, Material material)
     {
         this.center = center;
         this.radius = radius;
+        this.material = material;
     }
 
     override bool hit(Ray ray, float tMin, float tMax, ref HitRecord hitRecord)
@@ -31,6 +33,7 @@ class Sphere : Hitable
                 hitRecord.t = tmp;
                 hitRecord.p = ray.pointAtParameter(hitRecord.t);
                 hitRecord.normal = (hitRecord.p - center) / radius;
+                hitRecord.material = material;
                 return true;
             }
             tmp = (-b + sqrt(b * b - a * c)) / a;
@@ -39,6 +42,7 @@ class Sphere : Hitable
                 hitRecord.t = tmp;
                 hitRecord.p = ray.pointAtParameter(hitRecord.t);
                 hitRecord.normal = (hitRecord.p - center) / radius;
+                hitRecord.material = material;
                 return true;
             }
         }
@@ -48,6 +52,7 @@ class Sphere : Hitable
 
     Vector3 center;
     float radius;
+    Material material;
 }
 
 float hitSphere(Vector3 center, float radius, Ray ray)
